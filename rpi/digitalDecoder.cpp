@@ -48,7 +48,7 @@ void DigitalDecoder::writeDeviceState()
     file.close();
 }
 
-#warning "Update the SmartThings endpoint here"
+// #warning "Update the SmartThings endpoint here"
 void DigitalDecoder::sendDeviceState()
 {
     printf("Sending Device State\n");
@@ -97,22 +97,24 @@ void DigitalDecoder::updateDeviceState(uint32_t serial, uint8_t state)
 
     // Put the answer back in the map
     deviceStateMap[serial] = ds;
+
+    printf("{\"id\":\"%7u\",\"state\":\"%s\"}\n",serial, ds.alarm ? "OPEN" : "CLOSED");
     
     // Record the current state
-    writeDeviceState();
+    // writeDeviceState();
     
     // Send the notification if something changed
     if(state != ds.lastRawState)
     {
-        sendDeviceState();
+        // sendDeviceState();
     }
     deviceStateMap[serial].lastRawState = state;
     
-    for(const auto &dd : deviceStateMap)
-    {
-        printf("%sDevice %7u: %s\n",dd.first==serial ? "*" : " ", dd.first, dd.second.alarm ? "ALARM" : "OK");
-    }
-    printf("\n");
+    // for(const auto &dd : deviceStateMap)
+    // {
+    //     printf("%sDevice %7u: %s\n",dd.first==serial ? "*" : " ", dd.first, dd.second.alarm ? "ALARM" : "OK");
+    // }
+    // printf("\n");
 }
 
 void DigitalDecoder::handlePayload(uint64_t payload)
